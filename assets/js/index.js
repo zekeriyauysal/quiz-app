@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const quizContainer = document.getElementById("quiz-container");
   let currentQuestionIndex = 0;
   let questions = [];
+  let answers = [];
   let timerId;
 
   function getQuizQuestions() {
@@ -16,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((error) => console.error("Error:", error));
   }
-
   function displayQuestion(question) {
     clearTimeout(timerId);
     quizContainer.innerHTML = `
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function startReadingPeriod() {
-    let readTime = 10;
+    let readTime = 1;
     updateTimer(readTime);
 
     timerId = setInterval(() => {
@@ -87,17 +87,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const timerElement = document.getElementById("timer");
     timerElement.textContent = `Kalan Süre: ${time}s`;
   }
+  function saveAnswer() {
+    const selectedOption = document.querySelector('input[name="questionOption"]:checked');
+    answers[currentQuestionIndex] = selectedOption ? selectedOption.getAttribute("data-index") : "Not answered";
+  }
+  function displayResults() {
+    let resultsHTML = `<div class="alert alert-success" role="alert">Quiz Sonuçları</div><ul class="list-group">`;
+    answers.forEach((answer, index) => {
+      const questionTitle = questions[index].title;
+      const userAnswer = questions[index].options[answer] || "Not answered";
+      resultsHTML += `<li class="list-group-item">Soru ${index + 1}: ${questionTitle}<br/>Verdiğiniz Cevap: ${userAnswer}</li>`;
+    });
+    resultsHTML += `</ul>`;
+    quizContainer.innerHTML = resultsHTML;
+  }
 
   function goToNextQuestion() {
+    saveAnswer();
     clearInterval(timerId);
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
       displayQuestion(questions[currentQuestionIndex]);
     } else {
-      quizContainer.innerHTML = `<div class="alert alert-success" role="alert">
-                Quiz cevapları
-            </div>`;
-      clearTimeout(timerId);
+      displayResults();
     }
   }
   getQuizQuestions();
