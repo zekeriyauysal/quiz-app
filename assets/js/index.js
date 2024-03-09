@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function startReadingPeriod() {
-    let readTime = 1;
+    let readTime = 10;
     updateTimer(readTime);
 
     timerId = setInterval(() => {
