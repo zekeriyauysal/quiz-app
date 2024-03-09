@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let resultsHTML = `<div class="alert alert-success" role="alert">Quiz Sonuçları</div><ul class="list-group">`;
     answers.forEach((answer, index) => {
       const questionTitle = questions[index].title;
-      const userAnswer = questions[index].options[answer] || "Not answered";
+      const userAnswer = questions[index].options[answer] || "Boş bırakıldı";
       resultsHTML += `<li class="list-group-item">Soru ${index + 1}: ${questionTitle}<br/>Verdiğiniz Cevap: ${userAnswer}</li>`;
     });
     resultsHTML += `</ul>`;
